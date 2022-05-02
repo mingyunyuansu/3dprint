@@ -8,6 +8,8 @@ public:
     float x, y ,z;
     Point() = default;
     Point(float _x, float _y, float _z): x(_x), y(_y), z(_z) {}
+    Point& operator+(Point& rhs);
+    Point& operator-(Point& rhs);
 };
 
 

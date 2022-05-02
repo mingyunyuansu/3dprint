@@ -1,8 +1,11 @@
 #pragma once
 
+#include "Point.h"
+
 class Segment {
+  public:
   // 切线段类
-  int start, end;
+  Point start, end;
   int facetIndex;
   bool addedToPoly{false};
 };

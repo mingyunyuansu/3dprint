@@ -13,4 +13,5 @@ class Slicer {
   OptimizedModel* model{nullptr};
   Slicer() = default;
   void init(OptimizedModel* model);
+  void Slicing();
 };

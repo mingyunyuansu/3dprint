@@ -10,3 +10,4 @@ MakeFile
 compile_commands.json
 log
 .cache
+build/

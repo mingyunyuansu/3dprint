@@ -6,8 +6,8 @@
 #include <map>
 #include <vector>
 
-#include "Point.h"
 #include "Facet.h"
+#include "Point.h"
 
 class OptimizedModel {
 public:

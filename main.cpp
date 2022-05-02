@@ -3,6 +3,7 @@
 #include "InputFromSTL.h"
 #include "OptimizedModel.h"
 #include "STL2VTK.h"
+#include "Slicer.h"
 
 int main() {
     InputFromSTL inp;
@@ -11,6 +12,9 @@ int main() {
     std::cout << "Points number: " << model.points.size() << std::endl;
     std::cout << "Facets number: " << model.facets.size() << std::endl;
 
-    STL2VTK vtk;
-    vtk.generate(model);
+    // STL2VTK vtk;
+    // vtk.generate(model);
+
+    Slicer slicer;
+    slicer.init(&model);
 }

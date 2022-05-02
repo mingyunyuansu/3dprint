@@ -81,6 +81,7 @@ void InputFromSTL::init(OptimizedModel &model) {
             model.facets.emplace_back(ni1, ni2, ni3);
             //添加三角面下标进三个点
             size_t facetIndex = model.facets.size() - 1;
+            model.facets[facetIndex].set_model(&model);
             model.pointInFacet[ni1].push_back(facetIndex);
             model.pointInFacet[ni2].push_back(facetIndex);
             model.pointInFacet[ni3].push_back(facetIndex);
@@ -102,13 +103,13 @@ void InputFromSTL::init(OptimizedModel &model) {
     // }
 
     //debuging, 输出每个点的所有包含三角面
-    for (auto each: model.pointInFacet) {
-        std::cout << each.first << " ";
-        for (auto e: each.second) {
-            std::cout << e << " ";
-        }
-        std::cout << std::endl;
-    }
+    // for (auto each: model.pointInFacet) {
+    //     std::cout << each.first << " ";
+    //     for (auto e: each.second) {
+    //         std::cout << e << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
 }
 
 int InputFromSTL::isDupPoint(OptimizedModel &model, Point &point, int idx) {

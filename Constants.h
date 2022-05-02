@@ -7,7 +7,7 @@
 
 //const static std::string stl_path = "D:\\MyCppWorkSpace\\I_gotta_sleep\\Bunny.stl";
 const static std::string stl_path = "examples/Bunny.stl";
-const static double thickness = 0.2; // 切面精度
+const static double thickness = 0.0002; // 切面精度
 
 
 #endif //NEO_CONSTANTS_H

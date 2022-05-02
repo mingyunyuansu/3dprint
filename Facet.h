@@ -2,6 +2,11 @@
 #ifndef NEO_FACET_H
 #define NEO_FACET_H
 
+#include <utility>
+
+using Pair = std::pair<float, float>;
+
+class OptimizedModel;
 
 class Facet {
 public:
@@ -11,7 +16,12 @@ public:
         index[1] = b;
         index[2] = c;
     }
+    void set_model(OptimizedModel* model) {
+        this->model = model;
+    }
+    Pair getMinMaxZ();
     int index[3];
+    OptimizedModel* model{nullptr};
 };
 
 

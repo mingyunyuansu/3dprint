@@ -79,10 +79,36 @@ void InputFromSTL::init(OptimizedModel &model) {
         if (ni1 != ni2 && ni1 != ni3 && ni2 != ni3) {
             // 三角形三个点没有重复，该三角形有效
             model.facets.emplace_back(ni1, ni2, ni3);
+            //添加三角面下标进三个点
+            size_t facetIndex = model.facets.size() - 1;
+            model.pointInFacet[ni1].push_back(facetIndex);
+            model.pointInFacet[ni2].push_back(facetIndex);
+            model.pointInFacet[ni3].push_back(facetIndex);
         }
         //cnt += 7;
     }
     std::cout << "finish parsing " << path << std::endl;
+    for (int i = 0; i < model.facets.size(); ++i) {
+        processAdjFacets(model, i);
+    }
+    std::cout << "finish adj facets process" << std::endl;
+    // debuging, 输出每个三角面的邻接三角面，looks good
+    // for (auto each: model.adjFacet) {
+    //     std::cout << each.first << " ";
+    //     for (auto e: each.second) {
+    //         std::cout << e << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
+
+    //debuging, 输出每个点的所有包含三角面
+    for (auto each: model.pointInFacet) {
+        std::cout << each.first << " ";
+        for (auto e: each.second) {
+            std::cout << e << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 int InputFromSTL::isDupPoint(OptimizedModel &model, Point &point, int idx) {
@@ -121,4 +147,30 @@ int InputFromSTL::distance(OptimizedModel& model,  Point&p1, Point &p2) {
     int dy = round(p1.y * model.ratio) - round(p2.y * model.ratio);
     int dz = round(p1.z * model.ratio) - round(p2.z * model.ratio);
     return round(sqrt(dx * dx + dy * dy + dz * dz));
+}
+
+void InputFromSTL::processAdjFacets(OptimizedModel &model, int facetId) {
+    int p1 = model.facets[facetId].index[0];
+    int p2 = model.facets[facetId].index[1];
+    int p3 = model.facets[facetId].index[2];
+    for (int i = 0; i < model.facets.size(); ++i) {
+        if (facetId == i) continue;
+        if (found2PointsInFacets(model, i, p1, p2) ||
+            found2PointsInFacets(model, i, p1, p3) ||
+            found2PointsInFacets(model, i, p2, p3)) {
+                model.adjFacet[facetId].push_back(i);
+            }
+    }
+}
+
+bool InputFromSTL::found2PointsInFacets(OptimizedModel &model, int facetId, int p1, int p2) {
+    bool found1{false};
+    bool found2{false};
+    for (int i = 0; i < 3; ++i) {
+        if (model.facets[facetId].index[i] == p1) found1 = true;
+    }
+    for (int i = 0; i < 3; ++i) {
+        if (model.facets[facetId].index[i] == p2) found2 = true;
+    }
+    return found1 && found2;
 }

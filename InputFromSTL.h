@@ -19,8 +19,10 @@ public:
         this->path = stl_path;
     }
     void init(OptimizedModel& model);
+    void processAdjFacets(OptimizedModel& model, int facetId);
     int isDupPoint(OptimizedModel& model, Point& point, int idx);
     int distance(OptimizedModel& model, Point& p1, Point& p2);
+    bool found2PointsInFacets(OptimizedModel& model, int facetId, int p1, int p2);
     std::string path;
     std::vector<Point> points;
 

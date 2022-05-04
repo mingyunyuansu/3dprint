@@ -19,5 +19,5 @@ int main() {
     Slicer slicer;
     slicer.init(&model);
     slicer.Slicing();
-    //slicer.genPolygons();
+    slicer.genPolygons();
 }

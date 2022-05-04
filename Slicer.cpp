@@ -81,7 +81,15 @@ void Slicer::Slicing() {
         }
         seg.facetIndex = j;
         facet2segMap[j].emplace_back(i, layers[i].segments.size()); // 记录一个facet中包含的segment索引
-        layers[i].segments.emplace_back(seg);
+        bool dup = false;
+        for (auto old_seg: layers[i].segments) {
+            //已存在这个线段
+            if (old_seg.start == seg.start && old_seg.end == seg.end) {
+                dup = true;
+                break;
+            }
+        }
+        if (!dup) layers[i].segments.emplace_back(seg);
       }
     }
   }

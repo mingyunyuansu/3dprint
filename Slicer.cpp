@@ -139,7 +139,7 @@ void Slicer::genPolygons() {
           seg1->addedToPoly = true;
           poly.segments.emplace_back(*seg1);
           --seg_left;
-          while (true && seg_left > 2) { //太少的segment是不能组成poly的，直接无视
+          while (true && seg_left) { //太少的segment是不能组成poly的，直接无视
             //std::cout << "seg_left=" << seg_left << std::endl;
             // 找一个和上个end最近的start
             Segment* seg2 = nullptr;

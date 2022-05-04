@@ -13,3 +13,7 @@ log
 build/
 .DS_Store
 *.zip
+*ninja*
+Testing/
+.idea/
+.cmake/

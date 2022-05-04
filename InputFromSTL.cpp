@@ -71,7 +71,7 @@ void InputFromSTL::init(OptimizedModel &model) {
 
         int i1 = model.points.size();
         int ni1 = isDupPoint(model, a, i1);
-        int i2 = model.points.size(); 
+        int i2 = model.points.size();
         int ni2 = isDupPoint(model, b, i2);
         int i3 = model.points.size(); // 三个点的序号
         int ni3 = isDupPoint(model, c, i3);
@@ -121,7 +121,7 @@ int InputFromSTL::isDupPoint(OptimizedModel &model, Point &point, int idx) {
     } else {
         for (int i = 0; i < model.indexMap[h].size(); ++i) {
             int old_point_idx = model.indexMap[h][i];
-            if (distance(model, model.points[old_point_idx], point) < model.epsilon) {
+            if (distance(model, model.points[old_point_idx], point) <= model.epsilon) {
                 // 两个点过近（或者就是同一个点）
                 ret = old_point_idx;
                 break;
@@ -129,7 +129,7 @@ int InputFromSTL::isDupPoint(OptimizedModel &model, Point &point, int idx) {
         }
         // 哈希初筛通过，但是还需要比对剩下的所有点，以避免哈希冲突
         for (int j = 0; j < model.points.size() && ret == idx; ++j) {
-            if (distance(model, model.points[j], point) < model.epsilon) {
+            if (distance(model, model.points[j], point) <= model.epsilon) {
                 ret = j;
                 break;
             }
@@ -159,8 +159,8 @@ void InputFromSTL::processAdjFacets(OptimizedModel &model, int facetId) {
         if (found2PointsInFacets(model, i, p1, p2) ||
             found2PointsInFacets(model, i, p1, p3) ||
             found2PointsInFacets(model, i, p2, p3)) {
-                model.adjFacet[facetId].push_back(i);
-            }
+            model.adjFacet[facetId].push_back(i);
+        }
     }
 }
 

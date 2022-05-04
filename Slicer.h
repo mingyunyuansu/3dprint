@@ -14,7 +14,7 @@ using SPair = std::pair<size_t, size_t>;
 class Slicer {
   public:
     const float dis1 = 0.02; // 小于dis1的视为一个点
-    const float dis2 = 5.0; // 介于dis1 dis2的补一条线，否则fail
+    const float dis2 = 10.0; // 介于dis1 dis2的补一条线，否则fail
   std::vector<Layer> layers;
   std::map<size_t, std::vector<SPair>> facet2segMap; // 根据一个facet id，查找该facet中都有哪些segment，segment的格式是pair<layer_id, segment_id> 
   OptimizedModel* model{nullptr};

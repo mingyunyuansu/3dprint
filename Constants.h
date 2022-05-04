@@ -6,7 +6,7 @@
 #include <string>
 
 //const static std::string stl_path = "D:\\MyCppWorkSpace\\I_gotta_sleep\\Bunny.stl";
-const static std::string stl_path = "../examples/Sphere.stl";
+const static std::string stl_path = "../examples/Eight.stl";
 const static double thickness = 0.2; // 切面精度
 
 

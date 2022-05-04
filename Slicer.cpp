@@ -139,7 +139,7 @@ void Slicer::genPolygons() {
           seg1->addedToPoly = true;
           poly.segments.emplace_back(*seg1);
           --seg_left;
-          while (true) {
+          while (true && seg_left > 2) { //太少的segment是不能组成poly的，直接无视
             //std::cout << "seg_left=" << seg_left << std::endl;
             // 找一个和上个end最近的start
             Segment* seg2 = nullptr;
@@ -149,11 +149,6 @@ void Slicer::genPolygons() {
               if (i == j) continue; //跟起点同一个，跳过
               seg2 = &layers[layer_id].segments[j];
               if (seg2->addedToPoly) continue; //已被添加，跳过
-//              std::cout << "i=" << i << " j=" << j << std::endl;
-//              std::cout << "last.start: " << last->start << std::endl;
-//              std::cout << "last.end: " << last->end << std::endl;
-//              std::cout << "seg2.start: " << seg2->start << std::endl;
-//              std::cout << "seg2.end: " << seg2->end << std::endl;
               if (last->end.disTo(seg2->start) < curr_dis) {
                   curr_dis = last->end.disTo(seg2->start);
                   curr_seg = seg2;
@@ -176,7 +171,7 @@ void Slicer::genPolygons() {
               poly.segments.emplace_back(new_seg);
               last = &poly.segments.back();
             } else {
-              std::cout << "gap 过大" << std::endl;
+              std::cout << "gap 过大 curr_dis=" << curr_dis << ", layer_id=" << layer_id << std::endl;
               exit(-1);
             }
             if (last->end.disTo(seg1->start) <= dis1) {

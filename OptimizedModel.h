@@ -11,7 +11,7 @@
 
 class OptimizedModel {
 public:
-    int ratio = 10000; // ȡ��ʱ�ľ���
+    int ratio = 1000; // ȡ��ʱ�ľ���
     int epsilon = 20; // �ж�������ľ����Ƿ����
     std::map<size_t, std::vector<int>> indexMap; // �洢��ͬ��ϣֵ�ĵ��±꣬������ٲ���
     std::map<size_t, std::vector<int>> pointInFacet; //描述一个点被哪些facet包含，均为下标

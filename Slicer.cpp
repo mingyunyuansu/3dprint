@@ -204,8 +204,16 @@ void Slicer::genPolygons() {
 //处理好poly中的points
   for (int i = 0; i < layers.size(); ++i) {
     for (int j = 0; j < layers[i].polygons.size(); ++j) {
-      for (Segment seg: layers[i].polygons[j].segments) {
-        layers[i].polygons[j].points.emplace_back(seg.start);
+//      for (Segment seg: layers[i].polygons[j].segments) {
+//        if ()
+//        layers[i].polygons[j].points.emplace_back(seg.start);
+//        layers[i].polygons[j].points.emplace_back(seg.end);
+//      }
+      for (int k = 0; k < layers[i].polygons[j].segments.size(); ++k) {
+        Segment seg = layers[i].polygons[j].segments[k];
+        if (k == 0) {
+          layers[i].polygons[j].points.emplace_back(seg.start);
+        }
         layers[i].polygons[j].points.emplace_back(seg.end);
       }
     }

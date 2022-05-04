@@ -49,4 +49,5 @@ void Layers2VTK::generate(const std::string& path) {
     ofs << "4" << endl;
   }
   ofs.close();
+  std::cout << "layer 2 vtk finished" << std::endl;
 }

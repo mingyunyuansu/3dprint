@@ -120,35 +120,35 @@ void Slicer::genPolygons() {
     while (seg_left > 0) {
       std::cout << "seg_left=" << seg_left << std::endl;
       for (int i = 0; i < seg_size; ++i) {
-        Segment seg1 = layers[layer_id].segments[i];
-        Segment last = seg1;
-        if (!seg1.addedToPoly) {
+        Segment* seg1 = &layers[layer_id].segments[i];
+        Segment* last = &layers[layer_id].segments[i];
+        if (!seg1->addedToPoly) {
           // 找到一个新的线段
           Polygon poly;
-          seg1.addedToPoly = true;
-          poly.segments.emplace_back(seg1);
+          seg1->addedToPoly = true;
+          poly.segments.emplace_back(*seg1);
           --seg_left;
           while (true) {
-            //std::cout << "seg_left=" << seg_left << std::endl;
+            std::cout << "seg_left=" << seg_left << std::endl;
             for (int j = 0; j < seg_size; ++j) {
               if (i == j) continue; //跟起点同一个，跳过
-              Segment seg2 = layers[layer_id].segments[j];
-              if (seg2.addedToPoly) continue; //已被添加，跳过
-              std::cout << "i=" << i << " j=" << j << std::endl;
-              std::cout << "last.start: " << last.start << std::endl;
-              std::cout << "last.end: " << last.end << std::endl;
-              std::cout << "seg2.start: " << seg2.start << std::endl;
-              std::cout << "seg2.end: " << seg2.end << std::endl;
-              if (seg2.start == last.end) {
+              Segment* seg2 = &layers[layer_id].segments[j];
+              if (seg2->addedToPoly) continue; //已被添加，跳过
+//              std::cout << "i=" << i << " j=" << j << std::endl;
+//              std::cout << "last.start: " << last->start << std::endl;
+//              std::cout << "last.end: " << last->end << std::endl;
+//              std::cout << "seg2.start: " << seg2->start << std::endl;
+//              std::cout << "seg2.end: " << seg2->end << std::endl;
+              if (seg2->start == last->end) {
                 // 首尾相接
-                poly.segments.emplace_back(seg2);
-                seg2.addedToPoly = true;
+                seg2->addedToPoly = true;
+                poly.segments.emplace_back(*seg2);
                 --seg_left;
                 last = seg2;
                 break;
               }
             }
-            if (last.end == seg1.start) {
+            if (last->end == seg1->start) {
               // 找完一个封闭多边形
               layers[layer_id].polygons.emplace_back(poly);
               break;

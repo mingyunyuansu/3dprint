@@ -4,6 +4,6 @@
 
 class Polygon {
   public:
-  std::vector<int> points;
+  std::vector<Point> points;
   std::vector<Segment> segments;
 };

@@ -201,4 +201,14 @@ void Slicer::genPolygons() {
 //      std::cout << "poly.segments.size()=" << each_poly.segments.size() << std::endl;
 //    }
 //  }
+//处理好poly中的points
+  for (int i = 0; i < layers.size(); ++i) {
+    for (int j = 0; j < layers[i].polygons.size(); ++j) {
+      for (Segment seg: layers[i].polygons[j].segments) {
+        layers[i].polygons[j].points.emplace_back(seg.start);
+        layers[i].polygons[j].points.emplace_back(seg.end);
+      }
+    }
+  }
+  std::cout << "finish add points to poly" << std::endl;
 }

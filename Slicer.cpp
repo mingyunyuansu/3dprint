@@ -22,6 +22,7 @@ void Slicer::init(OptimizedModel* model) {
   int min_id = min / thickness - 1;
   int max_id = max / thickness + 1;
   for (int i = min_id; i <= max_id; ++i) {
+    //if (i > 1) break;
     //当前高度
     float curr = thickness * i;
     layers.emplace_back(curr);
@@ -33,6 +34,7 @@ void Slicer::init(OptimizedModel* model) {
 void Slicer::Slicing() {
   for (int i = 0; i < layers.size(); ++i) {
     // 对于每一层
+    //if (i > 1) break;
     for (int j = 0; j < model->facets.size(); ++j) {
       Pair pair = model->facets[j].getMinMaxZ();
       float curr_min = pair.first, curr_max = pair.second;
@@ -104,9 +106,16 @@ void Slicer::Slicing() {
 //计算切线段的坐标信息
 Segment Slicer::cutSegment(Point& p1, Point& p2, Point& p3, float z) {
   Segment ret;
-  ret.start = p1 + (p2 - p1) * ((z - p1.z) / (p2.z - p1.z));
+//  ret.start = p1 + ((p2 - p1) * ((z - p1.z) / (p2.z - p1.z)));
+//  ret.start.z = z;
+//  ret.end = p1 + ((p3 - p1) * ((z - p1.z) / (p3.z - p1.z)));
+//  ret.end.z = z;
+  ret.start.x = p1.x + (p2.x - p1.x) * (z - p1.z) / (p2.z - p1.z);
+  ret.start.y = p1.y + (p2.y - p1.y) * (z - p1.z) / (p2.z - p1.z);
   ret.start.z = z;
-  ret.end = p1 + (p3 - p1) * ((z - p1.z) / (p3.z - p1.z));
+
+  ret.end.x = p1.x + (p3.x - p1.x) * (z - p1.z) / (p3.z - p1.z);
+  ret.end.y = p1.y + (p3.y - p1.y) * (z - p1.z) / (p3.z - p1.z);
   ret.end.z = z;
   return ret;
 }
@@ -114,6 +123,7 @@ Segment Slicer::cutSegment(Point& p1, Point& p2, Point& p3, float z) {
 //为每一层layer处理出相应的polygons
 void Slicer::genPolygons() {
   for (int layer_id = 0; layer_id < layers.size(); ++layer_id) {
+    //if (layer_id > 1) break;
     // 对于每一个layer
     int seg_left = layers[layer_id].segments.size();
     int seg_size = seg_left;

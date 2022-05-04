@@ -14,8 +14,8 @@ int main() {
     std::cout << "Facets number: " << model.facets.size() << std::endl;
 
     //生成未切片前的vtk
-//     STL2VTK vtk;
-//     vtk.generate(model);
+    STL2VTK vtk;
+    vtk.generate(model);
 
     Slicer slicer;
     slicer.init(&model);

@@ -1,5 +1,6 @@
 #include "Point.h"
-#include <sys/_pthread/_pthread_once_t.h>
+
+#include <cmath>
 
 Point& Point::operator+(Point& rhs) {
   this->x += rhs.x;
@@ -26,4 +27,10 @@ bool Point::operator==(Point &rhs) {
 std::ostream& operator<<(std::ostream& out, Point& p) {
   out << p.x << " " << p.y << " " << p.z << std::endl;
   return out;
+}
+
+float Point::disTo(Point &p) {
+    float dx = this->x - p.x;
+    float dy = this->y - p.y;
+    return sqrt(dx * dx + dy * dy);
 }

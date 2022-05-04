@@ -5,6 +5,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <climits>
 
 void Slicer::init(OptimizedModel* model) {
   this->model = model;
@@ -116,9 +117,9 @@ void Slicer::genPolygons() {
     // 对于每一个layer
     int seg_left = layers[layer_id].segments.size();
     int seg_size = seg_left;
-    std::cout << "layer_id=" << layer_id << std::endl;
+    //std::cout << "layer_id=" << layer_id << std::endl;
     while (seg_left > 0) {
-      std::cout << "seg_left=" << seg_left << std::endl;
+      //std::cout << "seg_left=" << seg_left << std::endl;
       for (int i = 0; i < seg_size; ++i) {
         Segment* seg1 = &layers[layer_id].segments[i];
         Segment* last = &layers[layer_id].segments[i];
@@ -129,34 +130,75 @@ void Slicer::genPolygons() {
           poly.segments.emplace_back(*seg1);
           --seg_left;
           while (true) {
-            std::cout << "seg_left=" << seg_left << std::endl;
+            //std::cout << "seg_left=" << seg_left << std::endl;
+            // 找一个和上个end最近的start
+            Segment* seg2 = nullptr;
+            float curr_dis = INT_MAX;
+            Segment* curr_seg{nullptr};
             for (int j = 0; j < seg_size; ++j) {
               if (i == j) continue; //跟起点同一个，跳过
-              Segment* seg2 = &layers[layer_id].segments[j];
+              seg2 = &layers[layer_id].segments[j];
               if (seg2->addedToPoly) continue; //已被添加，跳过
 //              std::cout << "i=" << i << " j=" << j << std::endl;
 //              std::cout << "last.start: " << last->start << std::endl;
 //              std::cout << "last.end: " << last->end << std::endl;
 //              std::cout << "seg2.start: " << seg2->start << std::endl;
 //              std::cout << "seg2.end: " << seg2->end << std::endl;
-              if (seg2->start == last->end) {
-                // 首尾相接
-                seg2->addedToPoly = true;
-                poly.segments.emplace_back(*seg2);
-                --seg_left;
-                last = seg2;
-                break;
+              if (last->end.disTo(seg2->start) < curr_dis) {
+                  curr_dis = last->end.disTo(seg2->start);
+                  curr_seg = seg2;
               }
             }
-            if (last->end == seg1->start) {
+            // 每次结束循环，找到一个最近的segment
+            if (curr_dis <= dis1) {
+              // 差距较小，视为首尾相接
+              curr_seg->addedToPoly = true;
+              curr_seg->start = last->end; // 替换
+              poly.segments.emplace_back(*curr_seg);
+              --seg_left;
+              last = curr_seg;
+            } else if (curr_dis <= dis2) {
+              // 差距略大，需要补线段
+              Segment new_seg;
+              new_seg.start = last->end;
+              new_seg.end = curr_seg->start;
+              new_seg.addedToPoly = true;
+              poly.segments.emplace_back(new_seg);
+              last = &poly.segments.back();
+            } else {
+              std::cout << "gap 过大" << std::endl;
+              exit(-1);
+            }
+            if (last->end.disTo(seg1->start) <= dis1) {
               // 找完一个封闭多边形
+              last->end = seg1->start; // 替换
               layers[layer_id].polygons.emplace_back(poly);
               break;
+            } else if (seg_left == 0 && last->end.disTo(seg1->start) <= dis2) {
+              //最后一步需要补线段
+              Segment new_seg;
+              new_seg.start = last->end;
+              new_seg.end = seg1->start;
+              new_seg.addedToPoly = true;
+              poly.segments.emplace_back(new_seg);
+              layers[layer_id].polygons.emplace_back(poly);
+              break;
+            } else if (seg_left == 0) {
+              std::cout << "封边gap过大" << std::endl;
+              exit(-1);
             }
           }
-        } // if 该线段未被添加
+        }
       }
     }
   }
   std::cout << "finish gen polygons" << std::endl;
+  // polygons中可能存储比layers中更多的segments
+  //debug
+//  for (auto each_layer: layers) {
+//    std::cout << "layer's polysize: " << each_layer.polygons.size() << std::endl;
+//    for (auto each_poly: each_layer.polygons) {
+//      std::cout << "poly.segments.size()=" << each_poly.segments.size() << std::endl;
+//    }
+//  }
 }

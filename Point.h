@@ -13,6 +13,7 @@ public:
     Point& operator-(Point& rhs);
     Point& operator*(float r);
     bool operator==(Point& rhs);
+    float disTo(Point& p);
     friend std::ostream& operator<<(std::ostream& out, Point& p);
 };
 

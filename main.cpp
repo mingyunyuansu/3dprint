@@ -21,7 +21,10 @@ int main() {
     slicer.init(&model);
     slicer.Slicing();
     slicer.genPolygons();
+
     Layers2VTK layer_vtk;
     layer_vtk.init(&slicer);
     layer_vtk.generate();
+
+
 }

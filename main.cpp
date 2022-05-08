@@ -6,6 +6,7 @@
 #include "Slicer.h"
 #include "Layers2VTK.h"
 #include "Filler.h"
+#include "Filler2VTK.h"
 
 int main() {
     InputFromSTL inp;
@@ -29,4 +30,8 @@ int main() {
 
     Filler filler;
     filler.init(&slicer);
+    filler.Fill();
+
+    Filler2VTK filler_vtk(&filler);
+    filler_vtk.generate();
 }

@@ -34,4 +34,5 @@ int main() {
 
     Filler2VTK filler_vtk(&filler);
     filler_vtk.generate();
+
 }

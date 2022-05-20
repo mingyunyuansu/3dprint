@@ -8,26 +8,27 @@
 #include <climits>
 
 void Slicer::init(OptimizedModel* model) {
-  this->model = model;
+  this->model = model; //将已经处理好的OptimizedModel指针存入当前Slicer类中，指针赋值
   //切片层做准备，需要找到所有切片的最低高度和最高高度（可能有负数）
-  Pair pair = model->facets[0].getMinMaxZ();
-  float min = pair.first;
-  float max = pair.second;
-  for (int i = 1; i < model->facets.size(); ++i) {
-    pair = model->facets[i].getMinMaxZ();
-    min = pair.first < min ? pair.first : min;
-    max = pair.second > max ? pair.second : max;
-  }
+  Pair pair = model->facets[0].getMinMaxZ(); //获取model中下标0的三角面的z轴上的最高点和最低点值
+  float min = pair.first; //初始化一个最低值
+  float max = pair.second; //初始化一个最高值
+  for (int i = 1; i < model->facets.size(); ++i) { //从下标1开始遍历所有三角面（因为下标0已经遍历过，记录了它的最小和最大值）
+    pair = model->facets[i].getMinMaxZ(); //对当前遍历到的三角面，求它的最高和最低点
+    min = pair.first < min ? pair.first : min; // 如果当前三角面的最小值比已有的最小值小，那么已有最小值更新为新的最小值
+    max = pair.second > max ? pair.second : max; //最大值同理
+  } //遍历完成后min和max分别就记录了所有三角面的最小值和最大值
 
-  int min_id = min / thickness - 1;
-  int max_id = max / thickness + 1;
-  for (int i = min_id; i <= max_id; ++i) {
+  int min_id = min / thickness - 1; //计算按thickness作为精度切片时，最低点的起始序号
+  int max_id = max / thickness + 1; //同理的最高点的起始序号
+  //知道上面两个序号，就能一步步按步长逐渐增长。序号的值本身没有意义，但两个序号间的差值就是切出来的层数
+  for (int i = min_id; i <= max_id; ++i) { //遍历这些所有层
     //if (i > 1) break;
     //当前高度
-    float curr = thickness * i;
-    layers.emplace_back(curr);
+    float curr = thickness * i; //每一层尤其自己的高度，就是层高thickness * 层序号
+    layers.emplace_back(curr); //新建一个Layer类存入layers数组中
   }
-  std::cout << "Inited slicer, layers size=" << layers.size() << std::endl;
+  std::cout << "Inited slicer, layers size=" << layers.size() << std::endl; //debug信息，输出总共存了多少层
 }
 
 //切割，将切割出的切线段分进每个layer中

@@ -20,6 +20,7 @@ void Filler2VTK::generate(std::string path) {
   ofs << "DATASET UNSTRUCTURED_GRID" << endl;
   int cntPoint = 0, cntFacet = 0;
   for (auto each: filler->polyMap) {
+    //if (each.second.size() <= 1) continue;
     for (int i = 0; i < each.second.size(); ++i) {
       cntPoint += each.second[i].points.size();
     }
@@ -28,6 +29,7 @@ void Filler2VTK::generate(std::string path) {
 
   ofs << "POINTS " << cntPoint << " float" << endl;
   for (auto each: filler->polyMap) {
+    //if (each.second.size() <= 1) continue;
     for (Polygon poly : each.second) {
       for (Point p : poly.points) {
         ofs << p.x << " " <<
@@ -41,6 +43,7 @@ void Filler2VTK::generate(std::string path) {
   int cnt = 0;
   int tmp = 0;
   for (auto each_value : filler->polyMap) {
+    //if (each_value.second.size() <= 1) continue;
     for (auto each_poly : each_value.second) {
       tmp = cnt;
       ofs << each_poly.points.size() + 1 << " ";

@@ -17,12 +17,15 @@ struct Line {
     float b;
 };
 
+static const int64_t clipper_ratio = 10000;
+
 class Filler {
 public:
   Filler() = default;
   void init(Slicer* slicer_);
   void Fill();
-  void fillOnePolygon(std::vector<Polygon>& vp);
+  void fillOnePolygon(PolyId polyId);
+  Polygon offset(Polygon& poly);
   Point intersection(Segment& seg1, Segment& seg2);
   Line segmentFunction(Segment& seg);
   friend float diameter(Polygon& poly);
